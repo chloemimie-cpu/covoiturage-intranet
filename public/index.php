@@ -1,15 +1,8 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/config/database.php';
 
-declare(strict_types=1);
-
-require __DIR__ . '/../vendor/autoload.php';
-
-use Buki\Router\Router;
-
-$router = new Router();
-
-$router->get('/', function () {
-    return 'Bienvenue sur l\'application de covoiturage !';
-});
-
-$router->run();
+$employes = getPdo()->query('SELECT nom, prenom FROM employes LIMIT 5')->fetchAll();
+foreach ($employes as $e) {
+    echo htmlspecialchars($e['prenom'] . ' ' . $e['nom']) . '<br>';
+}
