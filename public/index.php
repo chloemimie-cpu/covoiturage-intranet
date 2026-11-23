@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use App\Core\Session;
 use Buki\Router\Router;
+
+Session::start();
 
 $router = new Router([
     'paths' => [
@@ -17,5 +20,8 @@ $router = new Router([
 ]);
 
 $router->get('/', 'HomeController@index');
+$router->get('/login', 'AuthController@showLogin');
+$router->post('/login', 'AuthController@login');
+$router->post('/logout', 'AuthController@logout');
 
 $router->run();
