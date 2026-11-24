@@ -28,6 +28,7 @@ $router->post('/trajets', 'TrajetController@store');
 $router->get('/trajets/:id/modifier', 'TrajetController@edit');
 $router->post('/trajets/:id/modifier', 'TrajetController@update');
 $router->post('/trajets/:id/supprimer', 'TrajetController@delete');
+
 $router->get('/admin', 'AdminController@index');
 $router->get('/admin/utilisateurs', 'AdminController@users');
 $router->get('/admin/agences', 'AdminController@agences');
