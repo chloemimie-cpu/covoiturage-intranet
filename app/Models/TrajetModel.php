@@ -38,4 +38,35 @@ class TrajetModel
 
         return $this->pdo->query($sql)->fetchAll();
     }
+
+    /**
+     * Enregistre un nouveau trajet.
+     *
+     * @param array<string, mixed> $data       Données déjà validées.
+     * @param int                  $idEmploye  Employé qui propose le trajet.
+     *
+     * @return int Identifiant du trajet créé.
+     */
+    public function create(array $data, int $idEmploye): int
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO trajets
+                (date_depart, date_arrivee, places_total, places_disponibles,
+                 id_employe, id_agence_depart, id_agence_arrivee)
+             VALUES
+                (:date_depart, :date_arrivee, :places_total, :places_disponibles,
+                 :id_employe, :id_agence_depart, :id_agence_arrivee)'
+        );
+        $stmt->execute([
+            'date_depart'        => $data['date_depart'],
+            'date_arrivee'       => $data['date_arrivee'],
+            'places_total'       => $data['places_total'],
+            'places_disponibles' => $data['places_disponibles'],
+            'id_employe'         => $idEmploye,
+            'id_agence_depart'   => $data['id_agence_depart'],
+            'id_agence_arrivee'  => $data['id_agence_arrivee'],
+        ]);
+
+        return (int) $this->pdo->lastInsertId();
+    }
 }

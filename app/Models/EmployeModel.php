@@ -36,4 +36,22 @@ class EmployeModel
 
         return $employe === false ? null : $employe;
     }
+
+    /**
+     * Cherche un employé par son identifiant.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function findById(int $id): ?array
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT id_employe, nom, prenom, telephone, email
+             FROM employes
+             WHERE id_employe = :id'
+        );
+        $stmt->execute(['id' => $id]);
+        $employe = $stmt->fetch();
+
+        return $employe === false ? null : $employe;
+    }
 }

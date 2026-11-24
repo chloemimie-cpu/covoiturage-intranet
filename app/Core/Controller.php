@@ -37,7 +37,22 @@ abstract class Controller
         header('Location: ' . $url);
         exit;
     }
+    /**
+     * Exige un utilisateur connecté, sinon redirige vers la connexion.
+     *
+     * @return array<string, mixed> L'utilisateur connecté.
+     */
+    protected function requireLogin(): array
+    {
+        $user = Session::user();
 
+        if ($user === null) {
+            Session::flash('error', 'Vous devez vous connecter pour accéder à cette page.');
+            $this->redirect('/login');
+        }
+
+        return $user;
+    }
     /**
      * Charge un fichier de vue et retourne son HTML.
      *
