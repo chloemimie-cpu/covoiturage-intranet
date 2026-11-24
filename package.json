@@ -1,0 +1,27 @@
+{
+  "name": "covoiturage-intranet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+ "scripts": {
+  "build:css": "sass --load-path=node_modules --quiet-deps assets/scss/main.scss public/css/main.css --style=compressed",
+  "watch:css": "sass --load-path=node_modules --quiet-deps --watch assets/scss/main.scss public/css/main.css"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chloemimie-cpu/covoiturage-intranet.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/chloemimie-cpu/covoiturage-intranet/issues"
+  },
+  "homepage": "https://github.com/chloemimie-cpu/covoiturage-intranet#readme",
+  "dependencies": {
+    "bootstrap": "5.3",
+    "sass": "^1.108.2"
+  }
+}

@@ -1,0 +1,7 @@
+// 1. Nos variables, AVANT Bootstrap pour qu'elles prennent le dessus
+@import "variables";
+
+// 2. Bootstrap (utilise les variables ci-dessus)
+@import "bootstrap/scss/bootstrap";
+
+// 3. Nos styles personnalisés

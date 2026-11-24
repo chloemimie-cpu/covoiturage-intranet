@@ -19,19 +19,22 @@ class TrajetModel
         $this->pdo = Database::getConnection();
     }
 
-    /**
+        /**
      * Retourne les trajets à venir qui ont encore des places,
-     * triés par date de départ croissante.
+     * triés par date de départ croissante, avec les coordonnées de l'auteur.
      *
      * @return array<int, array<string, mixed>>
      */
     public function findAvailable(): array
     {
-        $sql = 'SELECT t.id_trajet, t.id_employe, t.date_depart, t.date_arrivee, t.places_disponibles,
-                       d.nom AS agence_depart, a.nom AS agence_arrivee
+        $sql = 'SELECT t.id_trajet, t.id_employe, t.date_depart, t.date_arrivee,
+                       t.places_total, t.places_disponibles,
+                       d.nom AS agence_depart, a.nom AS agence_arrivee,
+                       e.nom, e.prenom, e.telephone, e.email
                 FROM trajets t
                 JOIN agences d ON d.id_agence = t.id_agence_depart
                 JOIN agences a ON a.id_agence = t.id_agence_arrivee
+                JOIN employes e ON e.id_employe = t.id_employe
                 WHERE t.places_disponibles > 0
                   AND t.date_depart > NOW()
                 ORDER BY t.date_depart ASC';
