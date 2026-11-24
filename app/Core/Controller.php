@@ -19,14 +19,27 @@ abstract class Controller
      */
     protected function render(string $view, array $data = []): string
     {
-        $content = $this->renderFile($view, $data);
+        $user = Session::user();
+
+        $content = $this->renderFile($view, $data + ['user' => $user]);
 
         return $this->renderFile('layout', [
             'content' => $content,
             'title'   => $data['title'] ?? 'Covoiturage',
-            'user'    => Session::user(),
+            'user'    => $user,
             'flash'   => Session::pullFlash(),
         ]);
+    }
+
+    /**
+     * Vérifie le jeton CSRF d'un formulaire, sinon refuse la requête.
+     */
+    protected function verifyCsrf(): void
+    {
+        if (!Csrf::isValid($_POST['csrf_token'] ?? null)) {
+            Session::flash('error', 'Requête invalide ou session expirée. Veuillez réessayer.');
+            $this->redirect('/');
+        }
     }
 
     /**
@@ -37,6 +50,7 @@ abstract class Controller
         header('Location: ' . $url);
         exit;
     }
+
     /**
      * Exige un utilisateur connecté, sinon redirige vers la connexion.
      *
@@ -53,6 +67,7 @@ abstract class Controller
 
         return $user;
     }
+
     /**
      * Charge un fichier de vue et retourne son HTML.
      *
@@ -68,7 +83,7 @@ abstract class Controller
             throw new RuntimeException("Vue introuvable : {$view}");
         }
 
-        extract($data);
+        extract($data, EXTR_SKIP);
         ob_start();
         require $file;
 

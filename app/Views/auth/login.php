@@ -16,3 +16,4 @@
     </p>
     <button type="submit">Se connecter</button>
 </form>
+<input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Core\Csrf::token()) ?>">

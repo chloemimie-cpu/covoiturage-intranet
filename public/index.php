@@ -23,8 +23,10 @@ $router->get('/', 'HomeController@index');
 $router->get('/login', 'AuthController@showLogin');
 $router->post('/login', 'AuthController@login');
 $router->post('/logout', 'AuthController@logout');
-
 $router->get('/trajets/nouveau', 'TrajetController@create');
 $router->post('/trajets', 'TrajetController@store');
+$router->get('/trajets/:id/modifier', 'TrajetController@edit');
+$router->post('/trajets/:id/modifier', 'TrajetController@update');
+$router->post('/trajets/:id/supprimer', 'TrajetController@delete');
 
 $router->run();

@@ -24,6 +24,7 @@
                 <form method="post" action="/logout" style="display:inline">
                     <button type="submit">Déconnexion</button>
                 </form>
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Core\Csrf::token()) ?>">
             </nav>
         <?php else: ?>
             <a href="/">Covoiturage</a>

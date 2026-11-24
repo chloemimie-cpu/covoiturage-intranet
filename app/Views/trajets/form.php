@@ -1,10 +1,11 @@
-<h1>Proposer un trajet</h1>
+<h1><?= htmlspecialchars($heading) ?></h1>
 
 <?php if (isset($errors['general'])): ?>
     <p><strong><?= htmlspecialchars($errors['general']) ?></strong></p>
 <?php endif; ?>
 
-<form method="post" action="/trajets">
+<form method="post" action="<?= htmlspecialchars($action) ?>">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(\App\Core\Csrf::token()) ?>">
 
     <h2>Vos coordonnées</h2>
     <p>
@@ -21,7 +22,7 @@
     </p>
     <p>
         <label>Téléphone</label><br>
-        <input type="text" value="<?= htmlspecialchars($employe['telephone']) ?>" readonly>
+        <input type="text" value="<?= htmlspecialchars((string) ($employe['telephone'] ?? '')) ?>" readonly>
     </p>
 
     <h2>Le trajet</h2>
@@ -56,6 +57,7 @@
         <p>
             <label for="<?= $champ ?>"><?= $libelle ?></label><br>
             <input type="<?= $type ?>" id="<?= $champ ?>" name="<?= $champ ?>" required
+                   <?= $type === 'number' ? 'min="0" max="255"' : '' ?>
                    value="<?= htmlspecialchars((string) ($old[$champ] ?? '')) ?>">
             <?php if (isset($errors[$champ])): ?>
                 <br><strong><?= htmlspecialchars($errors[$champ]) ?></strong>
@@ -63,6 +65,6 @@
         </p>
     <?php endforeach; ?>
 
-    <button type="submit">Enregistrer le trajet</button>
+    <button type="submit"><?= htmlspecialchars($submitLabel) ?></button>
     <a href="/">Annuler</a>
 </form>
