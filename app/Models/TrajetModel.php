@@ -136,4 +136,23 @@ class TrajetModel
 
         return $stmt->rowCount() > 0;
     }
+        /**
+     * Retourne tous les trajets avec leurs agences et leur auteur (vue administrateur).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function findAllWithDetails(): array
+    {
+        $sql = 'SELECT t.id_trajet, t.date_depart, t.date_arrivee,
+                       t.places_total, t.places_disponibles,
+                       d.nom AS agence_depart, a.nom AS agence_arrivee,
+                       e.nom, e.prenom, e.telephone, e.email
+                FROM trajets t
+                JOIN agences d ON d.id_agence = t.id_agence_depart
+                JOIN agences a ON a.id_agence = t.id_agence_arrivee
+                JOIN employes e ON e.id_employe = t.id_employe
+                ORDER BY t.date_depart ASC';
+
+        return $this->pdo->query($sql)->fetchAll();
+    }
 }

@@ -9,6 +9,9 @@ use PDO;
 
 /**
  * Accès aux données des employés (lecture seule : ils viennent du système RH).
+ *
+ * Attention : findAll() liste les coordonnées de tous les employés,
+ * à n'appeler que depuis une action protégée par requireAdmin().
  */
 class EmployeModel
 {
@@ -20,14 +23,14 @@ class EmployeModel
     }
 
     /**
-     * Cherche un employé par son adresse email.
+     * Cherche un employé par son adresse email (pour la connexion).
      *
      * @return array<string, mixed>|null Null si aucun employé ne correspond.
      */
     public function findByEmail(string $email): ?array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT id_employe, nom, prenom, email, mot_de_passe, role
+            'SELECT id_employe, nom, prenom, telephone, email, mot_de_passe, role
              FROM employes
              WHERE email = :email'
         );
@@ -38,14 +41,14 @@ class EmployeModel
     }
 
     /**
-     * Cherche un employé par son identifiant.
+     * Cherche un employé par son identifiant (sans le mot de passe).
      *
      * @return array<string, mixed>|null
      */
     public function findById(int $id): ?array
     {
         $stmt = $this->pdo->prepare(
-            'SELECT id_employe, nom, prenom, telephone, email
+            'SELECT id_employe, nom, prenom, telephone, email, role
              FROM employes
              WHERE id_employe = :id'
         );
@@ -53,5 +56,17 @@ class EmployeModel
         $employe = $stmt->fetch();
 
         return $employe === false ? null : $employe;
+    }
+
+    /**
+     * Retourne tous les employés, triés par nom (sans le mot de passe).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function findAll(): array
+    {
+        return $this->pdo
+            ->query('SELECT id_employe, nom, prenom, telephone, email, role FROM employes ORDER BY nom, prenom')
+            ->fetchAll();
     }
 }

@@ -67,7 +67,22 @@ abstract class Controller
 
         return $user;
     }
+    /**
+     * Exige un administrateur connecté, sinon redirige avec un message.
+     *
+     * @return array<string, mixed> L'administrateur connecté.
+     */
+    protected function requireAdmin(): array
+    {
+        $user = $this->requireLogin();
 
+        if ($user['role'] !== 'admin') {
+            Session::flash('error', 'Accès réservé aux administrateurs.');
+            $this->redirect('/');
+        }
+
+        return $user;
+    }
     /**
      * Charge un fichier de vue et retourne son HTML.
      *

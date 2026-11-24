@@ -28,5 +28,14 @@ $router->post('/trajets', 'TrajetController@store');
 $router->get('/trajets/:id/modifier', 'TrajetController@edit');
 $router->post('/trajets/:id/modifier', 'TrajetController@update');
 $router->post('/trajets/:id/supprimer', 'TrajetController@delete');
+$router->get('/admin', 'AdminController@index');
+$router->get('/admin/utilisateurs', 'AdminController@users');
+$router->get('/admin/agences', 'AdminController@agences');
+$router->post('/admin/agences', 'AdminController@storeAgence');
+$router->get('/admin/agences/:id/modifier', 'AdminController@editAgence');
+$router->post('/admin/agences/:id/modifier', 'AdminController@updateAgence');
+$router->post('/admin/agences/:id/supprimer', 'AdminController@deleteAgence');
+$router->get('/admin/trajets', 'AdminController@trajets');
+$router->post('/admin/trajets/:id/supprimer', 'AdminController@deleteTrajet');
 
 $router->run();

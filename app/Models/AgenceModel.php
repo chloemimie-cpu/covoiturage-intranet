@@ -1,33 +1,19 @@
-<?php
-
-declare(strict_types=1);
-
-namespace App\Models;
-
-use App\Core\Database;
-use PDO;
-
-/**
- * Accès aux données des agences (villes).
- */
-class AgenceModel
-{
-    private PDO $pdo;
-
-    public function __construct()
-    {
-        $this->pdo = Database::getConnection();
-    }
-
     /**
-     * Retourne toutes les agences, triées par nom.
+     * Supprime une agence.
      *
-     * @return array<int, array<string, mixed>>
+     * @return bool False si l'agence est utilisée par des trajets.
      */
-    public function findAll(): array
+    public function delete(int $id): bool
     {
-        return $this->pdo
-            ->query('SELECT id_agence, nom FROM agences ORDER BY nom')
-            ->fetchAll();
+        try {
+            $stmt = $this->pdo->prepare('DELETE FROM agences WHERE id_agence = :id');
+            $stmt->execute(['id' => $id]);
+
+            return $stmt->rowCount() > 0;
+        } catch (\PDOException $e) {
+            if ($e->getCode() === '23000') {
+                return false;
+            }
+            throw $e;
+        }
     }
-}
