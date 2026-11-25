@@ -1,7 +1,7 @@
-<h1>Tableau de bord</h1>
+<h1 class="h3 mb-4">Tableau de bord</h1>
 
-<ul>
-    <li><a href="/admin/utilisateurs">Lister les utilisateurs</a></li>
-    <li><a href="/admin/agences">Gérer les agences</a></li>
-    <li><a href="/admin/trajets">Lister les trajets</a></li>
-</ul>
+<div class="list-group">
+    <a href="/admin/utilisateurs" class="list-group-item list-group-item-action">Lister les utilisateurs</a>
+    <a href="/admin/agences" class="list-group-item list-group-item-action">Gérer les agences</a>
+    <a href="/admin/trajets" class="list-group-item list-group-item-action">Lister les trajets</a>
+</div>
