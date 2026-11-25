@@ -3,11 +3,16 @@
     "description": "Application intranet de covoiturage inter-sites",
     "type": "project",
     "autoload": {
-    "psr-4": {
-        "Emilie\\CovoiturageIntranet\\": "src/",
-        "App\\": "app/"
-    }
-},
+        "psr-4": {
+            "Emilie\\CovoiturageIntranet\\": "src/",
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Emilie",
