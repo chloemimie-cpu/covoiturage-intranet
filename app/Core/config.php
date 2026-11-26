@@ -18,7 +18,10 @@ final class Config
     private static ?array $values = null;
 
     /**
-     * Retourne la valeur d'une clé du fichier .env.
+     * Retourne la valeur d'une clé de configuration.
+     *
+     * Une variable d'environnement a priorité sur le fichier .env
+     * (utilisé par PHPUnit pour pointer vers la base de test).
      *
      * @param string $key Nom de la clé (ex. "DB_HOST").
      *
@@ -26,6 +29,11 @@ final class Config
      */
     public static function get(string $key): string
     {
+        $fromEnv = $_ENV[$key] ?? getenv($key);
+        if (is_string($fromEnv) && $fromEnv !== '') {
+            return $fromEnv;
+        }
+
         if (self::$values === null) {
             $path = dirname(__DIR__, 2) . '/.env';
             $parsed = is_readable($path)
