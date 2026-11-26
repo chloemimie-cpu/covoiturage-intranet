@@ -47,7 +47,7 @@ final class TrajetModelTest extends DatabaseTestCase
         $data = $this->tripData($this->lyon, $this->paris);
         $data['places_disponibles'] = 1;
 
-        $this->model->update($id, $data);
+        $this->model->update($id, $this->employe, $data);
 
         $trajet = $this->model->findById($id);
         $this->assertNotNull($trajet);
@@ -62,7 +62,7 @@ final class TrajetModelTest extends DatabaseTestCase
         $data   = $this->tripData($this->paris, $this->lyon);
         $data['places_disponibles'] = 0;
 
-        $this->model->update($first, $data);
+        $this->model->update($first, $this->employe, $data);
 
         $untouched = $this->model->findById($second);
         $this->assertNotNull($untouched);
@@ -74,10 +74,30 @@ final class TrajetModelTest extends DatabaseTestCase
         $first  = $this->model->create($this->tripData($this->paris, $this->lyon), $this->employe);
         $second = $this->model->create($this->tripData($this->paris, $this->lyon), $this->employe);
 
-        $this->model->delete($first);
+        $this->model->delete($first, $this->employe);
 
         $this->assertNull($this->model->findById($first));
         $this->assertNotNull($this->model->findById($second));
+    }
+
+    public function testAnotherEmployeeCannotUpdateOrDelete(): void
+    {
+        $id    = $this->model->create($this->tripData($this->paris, $this->lyon), $this->employe);
+        $other = $this->employe + 1;
+        $data  = $this->tripData($this->paris, $this->lyon);
+        $data['places_disponibles'] = 0;
+
+        $this->assertFalse($this->model->update($id, $other, $data));
+        $this->assertFalse($this->model->delete($id, $other));
+        $this->assertNotNull($this->model->findById($id));
+    }
+
+    public function testDeleteByAdminRemovesTrajet(): void
+    {
+        $id = $this->model->create($this->tripData($this->paris, $this->lyon), $this->employe);
+
+        $this->assertTrue($this->model->deleteByAdmin($id));
+        $this->assertNull($this->model->findById($id));
     }
 
     public function testDatabaseRejectsSameDepartureAndArrival(): void
