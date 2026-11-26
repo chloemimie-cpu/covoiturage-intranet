@@ -172,7 +172,7 @@ class AdminController extends Controller
         }
 
         try {
-            $model->delete($id);
+            (new TrajetModel())->deleteByAdmin($id);
             Session::flash('success', 'Le trajet a bien été supprimé.');
         } catch (PDOException $e) {
             error_log('Suppression de trajet impossible : ' . $e->getMessage());

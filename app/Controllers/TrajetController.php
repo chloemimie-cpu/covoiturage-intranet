@@ -75,8 +75,8 @@ class TrajetController extends Controller
     public function update(int $id): string
     {
         $this->verifyCsrf();
-        $user = $this->requireLogin();
-        $this->findAuthorizedTrajet($id, $user, false);
+        $user   = $this->requireLogin();
+        $trajet = $this->findAuthorizedTrajet($id, $user, false);
 
         $result = $this->validateInput();
 
@@ -85,7 +85,7 @@ class TrajetController extends Controller
         }
 
         try {
-            (new TrajetModel())->update($id, $result['data']);
+            (new TrajetModel())->update($id, (int) $trajet['id_employe'], $result['data']);
         } catch (PDOException $e) {
             error_log('Modification de trajet impossible : ' . $e->getMessage());
 
@@ -104,11 +104,11 @@ class TrajetController extends Controller
     public function delete(int $id): void
     {
         $this->verifyCsrf();
-        $user = $this->requireLogin();
-        $this->findAuthorizedTrajet($id, $user, true);
+        $user   = $this->requireLogin();
+        $trajet = $this->findAuthorizedTrajet($id, $user, true);
 
         try {
-            (new TrajetModel())->delete($id);
+            (new TrajetModel())->delete($id, (int) $trajet['id_employe']);
         } catch (PDOException $e) {
             error_log('Suppression de trajet impossible : ' . $e->getMessage());
             Session::flash('error', 'Une erreur est survenue : le trajet n\'a pas été supprimé.');

@@ -125,7 +125,7 @@ class TrajetModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
+        /**
      * Supprime un trajet, uniquement s'il appartient à l'employé.
      *
      * @return bool True si un trajet a été supprimé.
@@ -136,6 +136,18 @@ class TrajetModel
             'DELETE FROM trajets WHERE id_trajet = :id AND id_employe = :id_employe'
         );
         $stmt->execute(['id' => $id, 'id_employe' => $idEmploye]);
+
+        return $stmt->rowCount() > 0;
+    }
+    /**
+     * Supprime n'importe quel trajet (réservé à l'administrateur).
+     *
+     * @return bool True si un trajet a été supprimé.
+     */
+    public function deleteByAdmin(int $id): bool
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM trajets WHERE id_trajet = :id');
+        $stmt->execute(['id' => $id]);
 
         return $stmt->rowCount() > 0;
     }
